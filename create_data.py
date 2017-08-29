@@ -30,7 +30,7 @@ COUNTRY_CITY = {
 
 def create_continent_data():
     print('Creating continents...')
-    continent_file = open("continents.csv", "w")
+    continent_file = open('continents.csv', 'w')
     continents = ['Europe', 'America', 'Asia', 'Oceania']
     continents_dic = {key: index+1 for index, key in enumerate(continents)}
     for key, i in continents_dic.items():
@@ -41,7 +41,7 @@ def create_continent_data():
 
 def create_country_data(continents):
     print('Creating countries...')
-    country_file = open("countries.csv", "w")
+    country_file = open('countries.csv', 'w')
     all_countries = {}
     for continent, i in continents.items():
         countries_dic = {country: index+1+len(all_countries) for index, country in enumerate(CONTINENT_COUNTRY[continent])}
@@ -51,9 +51,10 @@ def create_country_data(continents):
     country_file.close()
     return all_countries
 
+
 def create_city_data(countries):
     print('Creating cities...')
-    city_file = open("cities.csv", "w")
+    city_file = open('cities.csv', 'w')
     all_cities = {}
     for country, i in countries.items():
         cities_dic = {city: index+1+len(all_cities) for index, city in enumerate(COUNTRY_CITY[country])}
@@ -64,10 +65,24 @@ def create_city_data(countries):
     return all_cities
 
 
+def create_airport_data(cities):
+    print('Creating airports...')
+    airport_file = open('airports.csv', 'w')
+    all_airports = {}
+    index = 1
+    for city, i in cities.items():
+        all_airports[city+' airport'] = index
+        index += 1
+        airport_file.write('{},{},{}\n'.format(index, city+' airport', i))
+    airport_file.close()
+    return all_airports
+
+
 def main():
     continents = create_continent_data()
     countries = create_country_data(continents)
     cities = create_city_data(countries)
+    airports = create_airport_data(cities)
 
 if __name__ == "__main__":
     main()
