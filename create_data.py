@@ -1,4 +1,6 @@
+import itertools
 import names
+import random
 
 CONTINENT_COUNTRY = {
     'Europe': [
@@ -79,8 +81,8 @@ def create_airport_data(cities):
     index = 1
     for city, i in cities.items():
         all_airports[city+' airport'] = index
-        index += 1
         airport_file.write('{},{},{}\n'.format(index, city+' airport', i))
+        index += 1
     airport_file.close()
     return all_airports
 
@@ -113,6 +115,30 @@ def create_airplane_data():
     return planeID_capacity
 
 
+def create_schedule_data():
+    print('Creating schedules...')
+    schedule_file = open('schedules.csv', 'w')
+    scheduleID = [x for x in range(1,24)]
+    for i in range(1,24):
+        schedule_file.write('{},{}\n'.format(i, str(i)+':00'))
+    schedule_file.close()
+    return scheduleID
+
+
+def create_routes_data(airports):
+    print('Creating routes...')
+    route_file = open('routes.csv', 'w')
+    airportsID = [i for _,i in airports.items()]
+    routes = list(itertools.combinations(airportsID, 2))
+    airportsID.reverse()
+    routes += list(itertools.combinations(airportsID, 2))
+    routesID = [x+1 for x in range(len(routes))]
+    for i, route in enumerate(routes):
+        route_file.write('{},{},{},{}\n'.format(i+1, route[0], route[1], random.randint(60, 800)))
+    route_file.close()
+    return routesID
+
+
 def main():
     continents = create_continent_data()
     countries = create_country_data(continents)
@@ -120,6 +146,8 @@ def main():
     airports = create_airport_data(cities)
     users = create_users_data()
     airplanes_capacity = create_airplane_data()
+    schedules = create_schedule_data()
+    routes = create_routes_data(airports)
 
 if __name__ == "__main__":
     main()
