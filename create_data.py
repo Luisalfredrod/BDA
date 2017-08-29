@@ -1,3 +1,5 @@
+import names
+
 CONTINENT_COUNTRY = {
     'Europe': [
             'Austria', 'Belgium', 'Denmark', 'Finland', 'France', 'Germany',
@@ -77,12 +79,24 @@ def create_airport_data(cities):
     airport_file.close()
     return all_airports
 
+def create_users_data():
+    user_file = open('users.csv', 'w')
+    num_of_users = int(input('How many users? '))
+    print('Creating users...')
+    users_id = [x+1 for x in range(num_of_users)]
+    for user_id in users_id:
+        first, last = names.get_first_name(), names.get_last_name()
+        user_file.write('{},{},{},{}\n'.format(user_id, first, last, first.lower()+'.'+last.lower()+'@mail.com'))
+    user_file.close()
+    return users_id
+
 
 def main():
     continents = create_continent_data()
     countries = create_country_data(continents)
     cities = create_city_data(countries)
     airports = create_airport_data(cities)
+    users = create_users_data()
 
 if __name__ == "__main__":
     main()
