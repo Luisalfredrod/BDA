@@ -29,6 +29,11 @@ COUNTRY_CITY = {
     'Vietnam': ['Hanoi'], 'Australia': ['Melbourne', 'Sydney'], 'Fiji': ['Suva'], 'New Zealand': ['Wellignton']
 }
 
+PLANES = [
+    'Rocket', 'Flash', 'Rabbit', 'Galaxy', 'Star', 'Sunset', 'BlackPearl', 'Lighting McQueen', 'Voldemort',
+    'Waterfall', 'Snow', 'Strong Wind', 'Eter', 'Socrates', 'Spell', 'Crow', 'Night King', 'Dragon', 'Wish', 'DeathStar',
+]
+
 
 def create_continent_data():
     print('Creating continents...')
@@ -79,6 +84,7 @@ def create_airport_data(cities):
     airport_file.close()
     return all_airports
 
+
 def create_users_data():
     user_file = open('users.csv', 'w')
     num_of_users = int(input('How many users? '))
@@ -91,12 +97,29 @@ def create_users_data():
     return users_id
 
 
+def create_airplane_data():
+    airplane_file = open('airplanes.csv', 'w')
+    print('Creating airplanes...')
+    planeID_capacity = {}
+    for i in range(len(PLANES)):
+        if i % 3 == 0:
+            planeID_capacity[i+1] = 300
+        elif i % 3 == 1:
+            planeID_capacity[i+1] = 200
+        else:
+            planeID_capacity[i+1] = 100
+        airplane_file.write('{},{},{}\n'.format(i+1, PLANES[i], planeID_capacity[i+1]))
+    airplane_file.close()
+    return planeID_capacity
+
+
 def main():
     continents = create_continent_data()
     countries = create_country_data(continents)
     cities = create_city_data(countries)
     airports = create_airport_data(cities)
     users = create_users_data()
+    airplanes_capacity = create_airplane_data()
 
 if __name__ == "__main__":
     main()
