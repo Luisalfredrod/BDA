@@ -17,4 +17,12 @@ echo "Tabla Airport cargada"
 sqlldr a1207563@qro/DTAPfRtO control=routes.ctl
 echo "Tabla Route cargada"
 
+sqlldr a1207563@qro/DTAPfRtO control=schedules.ctl
+echo "Tabla ScheduleTime cargada"
+
+sqlldr a1207563@qro/DTAPfRtO control=aiplanes.ctl
+echo "Tabla Airplane cargada"
+
+sqlldr a1207563@qro/DTAPfRtO control=passengers.ctl
+echo "Tabla Passenger cargada"
 
