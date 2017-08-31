@@ -1,45 +1,45 @@
-1,Tokio,3
-2,Copenhagen,20
-3,Stockholm,28
-5,Hambourg,23
-4,Frankfurt,23
-6,Suva,31
-7,Helsinki,21
-8,Amsterdam,25
-9,London,29
-10,Dubai,8
-11,Seul,6
-12,Paris,22
-13,Lyon,22
-14,Oslo,26
-15,Madrid,27
-16,Medellin,14
-17,Brussels,19
-18,Rome,24
-19,Florence,24
-21,Quebec,12
-22,Alberta,12
-20,Vancouver,12
-23,Wellignton,32
-24,Bangkok,7
-25,Santiago,13
-28,Queretaro,15
-27,Monterrey,15
-26,Mexico City,15
-30,Beijing,1
-29,Hong Kong,1
-31,Vienna,18
-32,Montevideo,16
-37,Chicago,17
-33,San Francisco,17
-36,Miami,17
-34,New York,17
-35,Seattle,17
-38,Moscow,4
-39,Buenos Aires,10
-40,Tampines,5
-41,Sao Paolo,11
-42,Melbourne,30
-43,Sydney,30
-44,Mumbai,2
-45,Hanoi,9
+1,London,21
+2,Oslo,18
+6,Miami,29
+7,Chicago,29
+4,New York,29
+5,Seattle,29
+3,San Francisco,29
+8,Hong Kong,1
+9,Beijing,1
+10,Buenos Aires,22
+11,Suva,31
+12,Seul,6
+14,Monterrey,27
+13,Mexico City,27
+15,Queretaro,27
+16,Tampines,5
+17,Moscow,4
+18,Mumbai,2
+19,Tokio,3
+20,Rome,16
+21,Florence,16
+22,Helsinki,13
+23,Copenhagen,12
+24,Amsterdam,17
+27,Alberta,24
+26,Quebec,24
+25,Vancouver,24
+28,Medellin,26
+29,Montevideo,28
+30,Bangkok,7
+31,Vienna,10
+32,Sao Paolo,23
+33,Madrid,19
+34,Wellignton,32
+35,Frankfurt,15
+36,Hambourg,15
+37,Stockholm,20
+38,Brussels,11
+39,Hanoi,9
+40,Melbourne,30
+41,Sydney,30
+42,Dubai,8
+43,Santiago,25
+45,Lyon,14
+44,Paris,14
