@@ -88,7 +88,7 @@ CREATE TABLE PassengerFull (
     last_name varchar2(50) NOT NULL,
     email varchar2(50) NOT NULL,
     
-    CONSTRAINT pk_Passenger PRIMARY KEY (id_passenger)
+    CONSTRAINT pk_PassengerFull PRIMARY KEY (id_passenger)
 );
 
 CREATE TABLE TicketFull (
