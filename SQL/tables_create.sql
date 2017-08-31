@@ -23,7 +23,7 @@ CREATE TABLE City
     name varchar2(50) NOT NULL,    
 
     CONSTRAINT pk_City PRIMARY KEY(id_city),
-    CONSTRAINT fk_CityCountry FOREIGN KEY (id_city) REFERENCES Country(id_country)
+    CONSTRAINT fk_CityCountry FOREIGN KEY (id_country) REFERENCES Country(id_country)
 );
 
 CREATE TABLE Airport

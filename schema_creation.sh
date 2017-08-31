@@ -7,7 +7,12 @@ fi
 
 sqlplus /nolog << EOF
 connect $1/$2
+set sqlblanklines on
+@tables_create.sql
 exit
 EOF
 
-echo "Finished!"
+echo "Loading data"
+sh ./load_data.sh
+
+echo "Finished"
