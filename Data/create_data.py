@@ -1,4 +1,5 @@
 from datetime import datetime
+import calendar
 import itertools
 import names
 import random
@@ -148,7 +149,7 @@ def create_flight_data(routes, schedules, airplanes_capacity):
     airplanes = [k for k,_ in airplanes_capacity.items()]
     for i in range(num_flights):
         current_date = datetime(2017, random.randint(1, 12), random.randint(1, 28))
-        date_srt = str(current_date.year)+'-'+str(current_date.month)+'-'+str(current_date.day)
+        date_srt = str(current_date.day)+'-'+calendar.month_abbr[current_date.month]+'-'+str(current_date.year)
         current_route = routes[random.randint(0, len(routes)-1)]
         current_schedule = schedules[random.randint(0, len(schedules)-1)]
         current_airplane = airplanes[random.randint(0, len(airplanes)-1)]
@@ -174,7 +175,7 @@ def create_ticket_data(flights_capacity, users):
                 return
         current_user = users[random.randint(0, len(users)-1)]
         current_date = datetime(2016, random.randint(1, 12), random.randint(1, 28))
-        date_srt = str(current_date.year)+'-'+str(current_date.month)+'-'+str(current_date.day)
+        date_srt = str(current_date.day)+'-'+calendar.month_abbr[current_date.month]+'-'+str(current_date.year)
         current_seat = flights_capacity_original[current_flight] - flights_capacity[current_flight]
         ticket_file.write('{},{},{},{}\n'.format(current_flight, current_user, current_seat, date_srt))
     ticket_file.close()
