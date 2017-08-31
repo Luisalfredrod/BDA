@@ -2,27 +2,44 @@
 
 clear
 
-sqlldr a1207563@qro/DTAPfRtO control=continents.ctl
-echo "Tabla Continent cargada"
+echo "Loading continents..."
+sqlldr a1207563@qro/DTAPfRtO control=continents.ctl silent=feedback
+echo "Table CONTINENT ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=countries.ctl
-echo "Tabla Country cargada"
+echo "Loading countries..."
+sqlldr a1207563@qro/DTAPfRtO control=countries.ctl silent=feedback
+echo "Table COUNTRY ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=cities.ctl
-echo "Tabla Cities cargada"
+echo "Loading cities..."
+sqlldr a1207563@qro/DTAPfRtO control=cities.ctl silent=feedback
+echo "Table CITY ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=airports.ctl
-echo "Tabla Airport cargada"
+echo "Loading aiports..."
+sqlldr a1207563@qro/DTAPfRtO control=airports.ctl silent=feedback
+echo "Table AIRPORT ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=routes.ctl
-echo "Tabla Route cargada"
+echo "Loading routes..."
+sqlldr a1207563@qro/DTAPfRtO control=routes.ctl silent=feedback
+echo "Table ROUTE ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=schedules.ctl
-echo "Tabla ScheduleTime cargada"
+echo "Loading schedules..."
+sqlldr a1207563@qro/DTAPfRtO control=schedules.ctl silent=feedback
+echo "Table SCHEDULETIME ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=airplanes.ctl
-echo "Tabla Airplane cargada"
+echo "Loading airplanes..."
+sqlldr a1207563@qro/DTAPfRtO control=airplanes.ctl silent=feedback
+echo "Table AIRPLANE ready"
 
-sqlldr a1207563@qro/DTAPfRtO control=passengers.ctl
-echo "Tabla Passenger cargada"
+echo "Loading passengers..."
+sqlldr a1207563@qro/DTAPfRtO control=passengers.ctl silent=feedback
+echo "Table PASSENGER ready"
+
+echo "Loading flights..."
+sqlldr a1207563@qro/DTAPfRtO control=flights.ctl silent=feedback
+echo "Table FLIGHT ready"
+
+echo "Loading tickets..."
+sqlldr a1207563@qro/DTAPfRtO control=tickets.ctl silent=feedback
+echo "Table TICKET ready"
+
 
