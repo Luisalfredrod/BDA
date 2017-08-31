@@ -71,7 +71,7 @@ CREATE TABLE Flight (
     id_plane number(10) NOT NULL,
     price number(10) NOT NULL,
     flight_date date NOT NULL,
-    on_time blob NOT NULL,
+    on_time number(1) NOT NULL,
     
     CONSTRAINT pk_Flight PRIMARY KEY (id_flight),
     CONSTRAINT fk_FlightRoute FOREIGN KEY (id_route) REFERENCES Route(id_route),
