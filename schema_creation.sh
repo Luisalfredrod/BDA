@@ -8,6 +8,7 @@ fi
 sqlplus /nolog << EOF
 connect $1/$2
 set sqlblanklines on
+@tables_drop.sql
 @tables_create.sql
 exit
 EOF
