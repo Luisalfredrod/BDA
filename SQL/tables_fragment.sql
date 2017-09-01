@@ -23,6 +23,16 @@ WHERE AIRPORTFULL.id_city = CITYFULL.id_city
     AND COUNTRYFULL.id_continent = CONTINENTFULL.id_continent 
     AND CONTINENTFULL.id_continent = &1;
 
+INSERT INTO ROUTE
+SELECT ROUTEFULL.id_route, ROUTEFULL.id_airport_departure, ROUTEFULL.id_airport_arrival, ROUTEFULL.route_duration
+FROM ROUTEFULL, AIRPORTFULL, CITYFULL, COUNTRYFULL, CONTINENTFULL
+WHERE ROUTEFULL.id_airport_departure = AIRPORTFULL.id_airport 
+    AND AIRPORTFULL.id_city = CITYFULL.id_city
+    AND CITYFULL.id_country = COUNTRYFULL.id_country
+    AND COUNTRYFULL.id_continent = CONTINENTFULL.id_continent
+    AND CONTINENTFULL.id_continent = &1;
+
+
 
 DROP TABLE TicketFull;
 DROP TABLE FlightFull;
