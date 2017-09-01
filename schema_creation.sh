@@ -5,6 +5,11 @@ if [ "$#" -ne 4 ]; then
     exit 1
 fi
 
+if [ $3 -gt 4 ]; then
+    echo "ERROR: Invalid continent ID. Valid ids: [1, 2, 3, 4]"
+    exit 1
+fi
+
 ORACLE_SID = $4; EXPORT ORACLE_SID
 
 sqlplus /nolog << EOF
@@ -16,7 +21,7 @@ exit
 EOF
 
 echo "Loading data"
-sh ./load_data.sh
+sh ./load_data.sh $1 $2
 
 sqlplus /nolog << EOF
 connect $1/$2
