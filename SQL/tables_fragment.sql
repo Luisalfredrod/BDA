@@ -45,6 +45,17 @@ WHERE FLIGHTFULL.id_route = ROUTEFULL.id_route
     AND COUNTRYFULL.id_continent = CONTINENTFULL.id_continent
     AND CONTINENTFULL.id_continent = &1;
 
+INSERT INTO TICKET
+SELECT TICKETFULL.id_flight, TICKETFULL.id_passenger, TICKETFULL.seat, TICKETFULL.date_purchase
+FROM TICKETFULL, FLIGHTFULL, ROUTEFULL, AIRPORTFULL, CITYFULL, COUNTRYFULL, CONTINENTFULL
+WHERE TICKETFULL.id_flight = FLIGHTFULL.id_flight
+    AND FLIGHTFULL.id_route = ROUTEFULL.id_route
+    AND ROUTEFULL.id_airport_departure = AIRPORTFULL.id_airport
+    AND AIRPORTFULL.id_city = CITYFULL.id_city
+    AND CITYFULL.id_country = COUNTRYFULL.id_country
+    AND COUNTRYFULL.id_continent = CONTINENTFULL.id_continent
+    AND CONTINENTFULL.id_continent = &1;
+
 DROP TABLE TicketFull;
 DROP TABLE FlightFull;
 DROP TABLE ScheduleTimeFull;
