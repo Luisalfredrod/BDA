@@ -1,4 +1,11 @@
 #!/bin/bash
+# Script for loading csv files into tables.
+# Params username password.
+
+if [ "$#" -ne 2 ]; then
+    echo "ERROR: Usage load_data.sh user password"
+    exit 1
+fi
 
 clear
 
@@ -41,5 +48,3 @@ echo "Table FLIGHT ready"
 echo "Loading tickets..."
 sqlldr $1/$2 control=tickets.ctl silent=feedback header
 echo "Table TICKET ready"
-
-
