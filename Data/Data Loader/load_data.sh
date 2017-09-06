@@ -1,6 +1,7 @@
 #!/bin/bash
-# Script for loading csv files into tables.
-# Params username password.
+# Brief: Script for loading csv files into tables.
+# Params: username password.
+# Author: Eduardo Vaca.
 
 if [ "$#" -ne 2 ]; then
     echo "ERROR: Usage load_data.sh user password"
