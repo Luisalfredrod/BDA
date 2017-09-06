@@ -1,9 +1,14 @@
+"""
+    Brief: Script that generates related random data simulating an Ariline DB
+    Author: Eduardo Vaca    
+"""
 from datetime import datetime
 import calendar
 import itertools
 import names
 import random
 
+# Dictionary mapping continent with countries related.
 CONTINENT_COUNTRY = {
     'Europe': [
             'Austria', 'Belgium', 'Denmark', 'Finland', 'France', 'Germany',
@@ -21,6 +26,7 @@ CONTINENT_COUNTRY = {
     ]
 }
 
+# Dictionary mapping country with cities related.
 COUNTRY_CITY = {
     'Austria': ['Vienna'], 'Belgium': ['Brussels'], 'Denmark': ['Copenhagen'], 'Finland': ['Helsinki'],
     'France': ['Paris', 'Lyon'], 'Germany': ['Frankfurt', 'Hambourg'], 'Italy': ['Rome', 'Florence'],
@@ -33,6 +39,7 @@ COUNTRY_CITY = {
     'Vietnam': ['Hanoi'], 'Australia': ['Melbourne', 'Sydney'], 'Fiji': ['Suva'], 'New Zealand': ['Wellignton']
 }
 
+# List of plane names.
 PLANES = [
     'Rocket', 'Flash', 'Rabbit', 'Galaxy', 'Star', 'Sunset', 'BlackPearl', 'Lighting McQueen', 'Voldemort',
     'Waterfall', 'Snow', 'Strong Wind', 'Eter', 'Socrates', 'Spell', 'Crow', 'Night King', 'Dragon', 'Wish', 'DeathStar',
@@ -40,6 +47,9 @@ PLANES = [
 
 
 def create_continent_data():
+    """Creates Continent's table data and write it in a file.   
+    :returns dictionary continent_name:id.
+    """
     print('Creating continents...')
     continent_file = open('continents.csv', 'w')
     continents = ['Europe', 'America', 'Asia', 'Oceania']
@@ -51,6 +61,10 @@ def create_continent_data():
 
 
 def create_country_data(continents):
+    """Creates Country's table data and write it in a file.
+    :param continents: Dictionary continent_name:id  to map ID to countries that belong to that continent.
+    :returns dictionary country_name:id.
+    """
     print('Creating countries...')
     country_file = open('countries.csv', 'w')
     all_countries = {}
@@ -64,6 +78,10 @@ def create_country_data(continents):
 
 
 def create_city_data(countries):
+    """Creates City's table data and write it in a file.
+    :param countries: Dictionary Country:ID to map ID to cities that belong to that country.
+    :returns dictionary city_name:id.
+    """
     print('Creating cities...')
     city_file = open('cities.csv', 'w')
     all_cities = {}
@@ -77,6 +95,10 @@ def create_city_data(countries):
 
 
 def create_airport_data(cities):
+    """Creates Airport's table data and write it in a file.
+    :param cities: Dictionary City:ID to map ID to airports that belong to that city.
+    :returns dictionary airport_name:id.
+    """
     print('Creating airports...')
     airport_file = open('airports.csv', 'w')
     all_airports = {}
@@ -90,6 +112,9 @@ def create_airport_data(cities):
 
 
 def create_users_data():
+    """Creates Passenger's table data with random users and write it in a file.
+    :returns list of passengers id.
+    """
     user_file = open('passengers.csv', 'w')
     num_of_users = int(input('How many users? '))
     print('Creating users...')
@@ -102,6 +127,9 @@ def create_users_data():
 
 
 def create_airplane_data():
+    """Creates Airplane's table data and write it in a file.
+    :returns dictionary id:capacity.
+    """
     airplane_file = open('airplanes.csv', 'w')
     print('Creating airplanes...')
     planeID_capacity = {}
@@ -118,6 +146,9 @@ def create_airplane_data():
 
 
 def create_schedule_data():
+    """Creates Schedule's table data and write it in a file.
+    :returns list of schedule ids.
+    """
     print('Creating schedules...')
     schedule_file = open('schedules.csv', 'w')
     scheduleID = [x for x in range(1,24)]
@@ -128,6 +159,10 @@ def create_schedule_data():
 
 
 def create_routes_data(airports):
+    """Creates Route's table data and write it in a file.
+    :param airports: Dictionary airport_name:id.
+    :returns list of route ids.
+    """
     print('Creating routes...')
     route_file = open('routes.csv', 'w')
     airportsID = [i for _,i in airports.items()]
@@ -142,6 +177,12 @@ def create_routes_data(airports):
 
 
 def create_flight_data(routes, schedules, airplanes_capacity):
+    """Creates Flight's table and write it in a file.
+    :param routes: list of routes ids.
+    :param schedules: list of schedules ids.
+    :param airplanes: dictionary airplane_id:capacity.
+    :returns dictionary flight_id:capacity.
+    """
     num_flights = int(input('How many flights? '))    
     print('Creating flights...')
     flight_file = open('flights.csv', 'w')
@@ -161,6 +202,10 @@ def create_flight_data(routes, schedules, airplanes_capacity):
 
 
 def create_ticket_data(flights_capacity, users):
+    """Creates Ticket's table data and write it in file.
+    :param flights_capacity: dictionary flight_id:capacity.
+    :param users: list of passengers ids.
+    """
     num_tickets = int(input('How many tickets?'))
     flights_capacity_original = dict(flights_capacity)
     print('Creating tickets...')
@@ -182,6 +227,8 @@ def create_ticket_data(flights_capacity, users):
 
 
 def main():
+    """Main function.
+    """
     continents = create_continent_data()
     countries = create_country_data(continents)
     cities = create_city_data(countries)
