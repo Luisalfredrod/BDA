@@ -1,5 +1,10 @@
+-- Script for creating tables, creates two schemas:
+--  1. For filling them with all data.
+--  2. For inserting fragmented data.
+-- Author: Eduardo Vaca.
 
--- Full tables, to be destroyed after fragmentation.
+
+-- FULL TABLES (to be destroyed after fragmentation).
 
 CREATE TABLE ContinentFull
 (
@@ -102,7 +107,7 @@ CREATE TABLE TicketFull (
     CONSTRAINT fk_TicketPassengerFull FOREIGN KEY (id_passenger) REFERENCES PassengerFull(id_passenger)
 );
 
--- Fragmented tables.
+-- FRAGMENTED TABLES. (to be kept after fragmentation).
 
 CREATE TABLE Continent
 (
