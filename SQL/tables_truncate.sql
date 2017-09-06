@@ -1,3 +1,5 @@
+-- Script for truncating tables.
+
 TRUNCATE TABLE Ticket;
 TRUNCATE TABLE Flight;
 TRUNCATE TABLE ScheduleTime;

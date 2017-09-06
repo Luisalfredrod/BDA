@@ -1,5 +1,4 @@
 -- Script for dropping tables.
--- Author: Eduardo Vaca.
 
 DROP TABLE Ticket;
 DROP TABLE Flight;
