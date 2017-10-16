@@ -195,7 +195,8 @@ def create_flight_data(routes, schedules, airplanes_capacity):
         current_schedule = schedules[random.randint(0, len(schedules)-1)]
         current_airplane = airplanes[random.randint(0, len(airplanes)-1)]
         current_price, current_ontime = random.randint(100,2000), random.randint(0,1)
-        flight_file.write('{},{},{},{},{},{},{}\n'.format(i+1, current_route, current_schedule, current_airplane, current_price, date_srt, current_ontime))
+        current_delay_time = random.randint(1, 120) if current_ontime == 0 else 0
+        flight_file.write('{},{},{},{},{},{},{},{}\n'.format(i+1, current_route, current_schedule, current_airplane, current_price, date_srt, current_ontime, current_delay_time))
         flightsID_capacity[i+1] = airplanes_capacity[current_airplane]
     flight_file.close()
     return flightsID_capacity
