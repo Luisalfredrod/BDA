@@ -66,3 +66,20 @@ BEGIN
         AND COU.id_continent = CONT.id_continent
         AND AIR.id_airport NOT IN (SELECT code_airport FROM D_DESTINY);
 END UPDATE_D_DESTINY;
+
+-- Procedure to load/update D_TICKET
+CREATE OR REPLACE PROCEDURE UPDATE_D_TICKET AS
+BEGIN
+    INSERT INTO D_TICKET
+    SELECT SEQ_D_TICKET.NEXTVAL,
+        FLI.id_flight,
+        PAS.id_passenger,
+        TIC.date_purchase,
+        PAS.first_name || ' ' || PAS.last_name,
+        PAS.email
+FROM TICKET TIC,
+    FLIGHT FLI,
+    PASSENGER PAS
+WHERE TIC.id_flight = FLI.id_flight
+    AND TIC.id_passenger = PAS.id_passenger;
+END UPDATE_D_TICKET;
