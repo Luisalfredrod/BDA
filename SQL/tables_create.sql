@@ -80,6 +80,7 @@ CREATE TABLE FlightFull (
     price number(10) NOT NULL,
     flight_date date NOT NULL,
     on_time number(1) NOT NULL,
+    delay_time number(10) NOT NULL,
     
     CONSTRAINT pk_FlightFull PRIMARY KEY (id_flight),
     CONSTRAINT fk_FlightRouteFull FOREIGN KEY (id_route) REFERENCES RouteFull(id_route),
@@ -183,6 +184,7 @@ CREATE TABLE Flight (
     price number(10) NOT NULL,
     flight_date date NOT NULL,
     on_time number(1) NOT NULL,
+    delay_time number(10) NOT NULL,
     
     CONSTRAINT pk_Flight PRIMARY KEY (id_flight),
     CONSTRAINT fk_FlightRoute FOREIGN KEY (id_route) REFERENCES Route(id_route),
