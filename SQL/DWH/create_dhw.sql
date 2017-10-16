@@ -3,6 +3,22 @@
  */
 
 /*
+ * Destruction of DHW tables.
+ */
+DROP TABLE TICKET_SELLS;
+DROP TABLE D_DESTINY;
+DROP TABLE D_TIME;
+DROP TABLE D_TICKET;
+
+/*
+ * Destruction of DHW sequences.
+ */
+DROP SEQUENCE SEQ_D_DESTINY;
+DROP SEQUENCE SEQ_D_TICKET;
+DROP SEQUENCE SEQ_D_TIME;
+DROP SEQUENCE SEQ_TICKET_SELLS;
+
+/*
  * Creation of DHW tables.
  */
 
