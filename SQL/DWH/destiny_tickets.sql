@@ -67,3 +67,14 @@
      CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time),
      CONSTRAINT fk_TicketSellsTicket FOREIGN KEY (id_ticket) REFERENCES D_TICKET(id_ticket)
  );
+
+ /* Create Sequences for primary keys.
+  */
+-- Destiny dimension sequence
+CREATE SEQUENCE SEQ_D_DESTINY;
+-- Time dimension sequence
+CREATE SEQUENCE SEQ_D_TIME;
+-- Ticket dimension sequence
+CREATE SEQUENCE SEQ_D_TICKET;
+-- TicketSells sequence
+CREATE SEQUENCE SEQ_TICKET_SELLS;
