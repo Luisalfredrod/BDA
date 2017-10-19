@@ -164,34 +164,18 @@ CREATE TABLE D_TIME
     CONSTRAINT pk_D_Time PRIMARY KEY (id_time)
 );
 
--- Dimension: Ticket table.
-CREATE TABLE D_TICKET
-(
-    id_ticket NUMBER(10) NOT NULL,
-    code_ticket VARCHAR(20) NOT NULL,
-    code_flight NUMBER(10) NOT NULL,
-    code_passenger NUMBER(10) NOT NULL,
-    date_purchase DATE NOT NULL,
-    passenger_name VARCHAR2(100) NOT NULL,
-    passenger_email VARCHAR2(50) NOT NULL,
-
-    CONSTRAINT pk_D_Ticket PRIMARY KEY (id_ticket)
-);
-
 -- Fact: DESTINY_TICKETS
 CREATE TABLE DESTINY_TICKETS
 (
     id_destiny_tickets NUMBER(10) NOT NULL,
     id_destiny NUMBER(10) NOT NULL,
     id_time NUMBER(10) NOT NULL,
-    id_ticket NUMBER(10) NOT NULL,
-    tickets_count NUMBER(10) NOT NULL,
+    tickets_sold NUMBER(10) NOT NULL,
     income NUMBER(10) NOT NULL,
 
     CONSTRAINT pk_TicketSells PRIMARY KEY (id_destiny_tickets),
     CONSTRAINT fk_TicketSellsDestiny FOREIGN KEY (id_destiny) REFERENCES D_DESTINY(id_destiny),
-    CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time),
-    CONSTRAINT fk_TicketSellsTicket FOREIGN KEY (id_ticket) REFERENCES D_TICKET(id_ticket)
+    CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)    
 );
 
 -- Dimension: Airplane table.
