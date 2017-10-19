@@ -156,6 +156,7 @@ CONSTRAINT pk_D_Time PRIMARY KEY (id_time)
 CREATE TABLE D_TICKET
 (
     id_ticket NUMBER(10) NOT NULL,
+    code_ticket VARCHAR(20) NOT NULL,
     code_flight NUMBER(10) NOT NULL,
     code_passenger NUMBER(10) NOT NULL,
     date_purchase DATE NOT NULL,

@@ -6,6 +6,8 @@
  * Create procedures to load/update tables
  */
 
+----------------------------------- CREATION --------------------------------------
+
 -- Procedure to load D_TIME data
 CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME (p_startDate in
 DATE, v_endDate in DATE) AS 
@@ -32,7 +34,7 @@ BEGIN
         select to_char(v_startDate, 'DAY') into v_nombredia from dual;
         select to_char(v_startDate, 'DAY') into v_nombredia from dual;
         SELECT EXTRACT(DAY FROM v_startDate) INTO v_dia FROM DUAL;
-        INSERT INTO D_Tiempo VALUES(seq_d_tiempo.NEXTVAL, v_startDate, v_anio, v_mes, v_dia, v_nombredia);
+        INSERT INTO D_TIME VALUES(SEQ_D_TIME.NEXTVAL, v_startDate, v_anio, v_mes, v_dia, v_nombredia);
         COMMIT;        
         v_startDate := v_startDate + 1;
         SELECT EXTRACT(YEAR FROM v_startDate) INTO v_currentYear FROM DUAL;
@@ -57,10 +59,10 @@ BEGIN
         CI.name,
         COU.name,
         CONT.name
-    FROM AIRPORT@QRO AIR,
-        CITY@QRO CI,
-        COUNTRY@QRO COU,
-        CONTINENT@QRO CONT
+    FROM MV_AIRPORT AIR,
+        MV_CITY CI,
+        MV_COUNTRY COU,
+        MV_CONTINENT CONT
     WHERE AIR.id_city = CI.id_city
         AND CI.id_country = COU.id_country
         AND COU.id_continent = CONT.id_continent
@@ -72,14 +74,27 @@ CREATE OR REPLACE PROCEDURE UPDATE_D_TICKET AS
 BEGIN
     INSERT INTO D_TICKET
     SELECT SEQ_D_TICKET.NEXTVAL,
-        FLI.id_flight,
+        TO_CHAR(TIC.id_flight) || TO_CHAR(TIC.id_passenger) || TO_CHAR(TIC.seat),
+        TIC.id_flight,
         PAS.id_passenger,
         TIC.date_purchase,
         PAS.first_name || ' ' || PAS.last_name,
         PAS.email
-FROM TICKET TIC,
-    FLIGHT FLI,
-    PASSENGER PAS
-WHERE TIC.id_flight = FLI.id_flight
-    AND TIC.id_passenger = PAS.id_passenger;
+FROM MV_TICKET TIC, 
+    MV_PASSENGER PAS
+WHERE TIC.id_passenger = PAS.id_passenger
+    AND TO_CHAR(TIC.id_flight) || TO_CHAR(TIC.id_passenger) || TO_CHAR(TIC.seat) NOT IN (SELECT code_ticket FROM D_TICKET);
 END UPDATE_D_TICKET;
+
+
+----------------------------------- EXECUTION --------------------------------------
+
+-- Execute procedure to load D_Time table
+EXECUTE PD_LOAD_D_TIME(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31', 'yyyy/mm/dd'));
+
+-- Execute procedure to load D_Destiny table
+EXECUTE UPDATE_D_DESTINY;
+
+-- Execute procedure to load D_Ticket table
+EXECUTE UPDATE_D_TICKET;
+
