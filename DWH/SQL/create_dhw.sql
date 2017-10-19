@@ -7,7 +7,7 @@
 /*
  * Destruction of DHW tables.
  */
-DROP TABLE TICKET_SELLS;
+DROP TABLE DESTINY_TICKETS;
 DROP TABLE AIRPLANE_FLIGHTS;
 DROP TABLE D_DESTINY;
 DROP TABLE D_TIME;
@@ -20,7 +20,7 @@ DROP TABLE D_AIRPLANE;
 DROP SEQUENCE SEQ_D_DESTINY;
 DROP SEQUENCE SEQ_D_TICKET;
 DROP SEQUENCE SEQ_D_TIME;
-DROP SEQUENCE SEQ_TICKET_SELLS;
+DROP SEQUENCE SEQ_DESTINY_TICKETS;
 DROP SEQUENCE SEQ_AIRPLANE_FLIGHTS;
 DROP SEQUENCE SEQ_D_AIRPLANE;
 
@@ -89,17 +89,25 @@ BUILD IMMEDIATE
 REFRESH FORCE
 ON DEMAND
 AS
-SELECT * 
-FROM TICKET@EUROPE
+SELECT TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price as price, COUNT(1) as tickets_sold
+FROM TICKET@EUROPE TICKET, FLIGHT@EUROPE FLIGHT, ROUTE@EUROPE ROUTE
+WHERE TICKET.id_flight = FLIGHT.id_flight AND ROUTE.id_route = FLIGHT.id_route
+GROUP BY TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price
 UNION
-SELECT *
-FROM TICKET@AMERICA
+SELECT TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price as price, COUNT(1) as tickets_sold
+FROM TICKET@AMERICA TICKET, FLIGHT@AMERICA FLIGHT, ROUTE@AMERICA ROUTE
+WHERE TICKET.id_flight = FLIGHT.id_flight AND ROUTE.id_route = FLIGHT.id_route
+GROUP BY TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price
 UNION
-SELECT *
-FROM TICKET@ASIA
+SELECT TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price as price, COUNT(1) as tickets_sold
+FROM TICKET@ASIA TICKET, FLIGHT@ASIA FLIGHT, ROUTE@ASIA ROUTE
+WHERE TICKET.id_flight = FLIGHT.id_flight AND ROUTE.id_route = FLIGHT.id_route
+GROUP BY TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price
 UNION
-SELECT *
-FROM TICKET@OCEANIA;
+SELECT TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price as price, COUNT(1) as tickets_sold
+FROM TICKET@OCEANIA TICKET, FLIGHT@OCEANIA FLIGHT, ROUTE@OCEANIA ROUTE
+WHERE TICKET.id_flight = FLIGHT.id_flight AND ROUTE.id_route = FLIGHT.id_route
+GROUP BY TICKET.date_purchase, TICKET.id_passenger, ROUTE.id_airport_arrival, FLIGHT.price;
 
 -- Flight materialized view
 CREATE MATERIALIZED VIEW MV_FLIGHT
@@ -170,17 +178,17 @@ CREATE TABLE D_TICKET
     CONSTRAINT pk_D_Ticket PRIMARY KEY (id_ticket)
 );
 
--- Fact: TICKET_SELLS
-CREATE TABLE TICKET_SELLS
+-- Fact: DESTINY_TICKETS
+CREATE TABLE DESTINY_TICKETS
 (
-    id_ticket_sells NUMBER(10) NOT NULL,
+    id_destiny_tickets NUMBER(10) NOT NULL,
     id_destiny NUMBER(10) NOT NULL,
     id_time NUMBER(10) NOT NULL,
     id_ticket NUMBER(10) NOT NULL,
     tickets_count NUMBER(10) NOT NULL,
     income NUMBER(10) NOT NULL,
 
-    CONSTRAINT pk_TicketSells PRIMARY KEY (id_ticket_sells),
+    CONSTRAINT pk_TicketSells PRIMARY KEY (id_destiny_tickets),
     CONSTRAINT fk_TicketSellsDestiny FOREIGN KEY (id_destiny) REFERENCES D_DESTINY(id_destiny),
     CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time),
     CONSTRAINT fk_TicketSellsTicket FOREIGN KEY (id_ticket) REFERENCES D_TICKET(id_ticket)
@@ -222,7 +230,7 @@ CREATE SEQUENCE SEQ_D_TIME;
 -- Ticket dimension sequence
 CREATE SEQUENCE SEQ_D_TICKET;
 -- TicketSells sequence
-CREATE SEQUENCE SEQ_TICKET_SELLS;
+CREATE SEQUENCE SEQ_DESTINY_TICKETS;
 --Airplane dimension sequence
 CREATE SEQUENCE SEQ_D_AIRPLANE;
 --AirplaneFlights sequence
