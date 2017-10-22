@@ -2,6 +2,7 @@
 -- Param continent_id.
 -- Author: Eduardo Vaca.
 
+-- Global table Continent.
 INSERT INTO CONTINENT
 SELECT *
 FROM CONTINENTFULL;
@@ -31,14 +32,17 @@ WHERE ROUTEFULL.id_airport_departure = AIRPORTFULL.id_airport
     AND COUNTRYFULL.id_continent = CONTINENTFULL.id_continent
     AND CONTINENTFULL.id_continent = &1;
 
+-- Global table ScheduleTime.
 INSERT INTO SCHEDULETIME
 SELECT *
 FROM SCHEDULETIMEFULL;
 
+-- Global table Airplane.
 INSERT INTO AIRPLANE
 SELECT *
 FROM AIRPLANEFULL;
 
+-- Global table Passenger.
 INSERT INTO PASSENGER
 SELECT *
 FROM PASSENGERFULL;
