@@ -70,24 +70,6 @@ BEGIN
     COMMIT;
 END UPDATE_D_DESTINY;
 
--- Procedure to load/update D_TICKET
-CREATE OR REPLACE PROCEDURE UPDATE_D_TICKET AS
-BEGIN
-    INSERT INTO D_TICKET
-    SELECT SEQ_D_TICKET.NEXTVAL,
-        TO_CHAR(TIC.id_flight) || TO_CHAR(TIC.id_passenger) || TO_CHAR(TIC.seat) AS id_ticket,
-        TIC.id_flight,
-        PAS.id_passenger,
-        TIC.date_purchase,
-        PAS.first_name || ' ' || PAS.last_name,
-        PAS.email
-    FROM MV_TICKET TIC, 
-        MV_PASSENGER PAS
-    WHERE TIC.id_passenger = PAS.id_passenger
-        AND TO_CHAR(TIC.id_flight) || TO_CHAR(TIC.id_passenger) || TO_CHAR(TIC.seat) NOT IN (SELECT code_ticket FROM D_TICKET);
-    COMMIT;
-END UPDATE_D_TICKET;
-
 -- Procedure to load/update destiny tickets
 CREATE OR REPLACE PROCEDURE UPDATE_DESTINY_TICKETS
 (
