@@ -8,7 +8,10 @@
 
 ----------------------------------- CREATION --------------------------------------
 
--- Procedure to load D_TIME data
+-- Procedure to load dimension table D_TIME data
+-- PARAMS:
+--  - p_startDate : initial date to be filled in the Dimension time table
+--  - v_endData : final date to be filled in the Dimension time table
 CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME (p_startDate in
 DATE, v_endDate in DATE) AS 
 v_currentDay NUMBER;
@@ -46,7 +49,7 @@ BEGIN
     END LOOP;
 END PD_LOAD_D_TIME;
 
--- Procedure to load/update D_DESTINY
+-- Procedure to load/update dimension table D_DESTINY
 CREATE OR REPLACE PROCEDURE UPDATE_D_DESTINY AS
 BEGIN
     INSERT INTO D_DESTINY
@@ -71,6 +74,9 @@ BEGIN
 END UPDATE_D_DESTINY;
 
 -- Procedure to load/update destiny tickets
+-- PARAMS:
+--  - STARTDATE: initial date of records to be updated
+--  - ENDDATE: final date of records to be updated
 CREATE OR REPLACE PROCEDURE UPDATE_DESTINY_TICKETS
 (
     STARTDATE IN DATE,
