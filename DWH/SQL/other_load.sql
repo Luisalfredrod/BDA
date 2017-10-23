@@ -4,8 +4,8 @@
 --  - v_endData : final date to be filled in the Dimension time table
 CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME 
 (
-    p_startDate in DATE,
-    v_endDate in DATE
+    p_startDate IN DATE,
+    v_endDate IN DATE
 ) AS 
 v_currentDay NUMBER;
 v_currentMont NUMBER;
@@ -25,10 +25,10 @@ BEGIN
     SELECT EXTRACT(DAY FROM v_endDate) INTO v_goalDay FROM DUAL;
     WHILE v_do
     LOOP        
-        select to_char(v_startDate, 'YYYY') into v_anio from dual;
-        select to_char(v_startDate, 'MONTH') into v_mes from dual;
-        select to_char(v_startDate, 'DAY') into v_nombredia from dual;
-        select to_char(v_startDate, 'DAY') into v_nombredia from dual;
+        SELECT to_char(v_startDate, 'YYYY') INTO v_anio FROM dual;
+        SELECT to_char(v_startDate, 'MONTH') INTO v_mes FROM dual;
+        SELECT to_char(v_startDate, 'DAY') INTO v_nombredia FROM dual;
+        SELECT to_char(v_startDate, 'DAY') INTO v_nombredia FROM dual;
         SELECT EXTRACT(DAY FROM v_startDate) INTO v_dia FROM DUAL;
         INSERT INTO D_TIME VALUES(SEQ_D_TIME.NEXTVAL, v_startDate, v_anio, v_mes, v_dia, v_nombredia);
         COMMIT;        
