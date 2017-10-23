@@ -21,11 +21,3 @@ BEGIN
     end if;
 END CHANGE_USER_EMAIL;
 /
-
--- Procedure to load/update dimension table D_DESTINY
-CREATE OR REPLACE PROCEDURE UPDATEDESTINY ()
-AS
-BEGIN
-    SELECT * FROM D_DESTINY;    
-END UPDATEDESTINY;
-/
