@@ -12,8 +12,11 @@
 -- PARAMS:
 --  - p_startDate : initial date to be filled in the Dimension time table
 --  - v_endData : final date to be filled in the Dimension time table
-CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME (p_startDate in
-DATE, v_endDate in DATE) AS 
+CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME 
+(
+    p_startDate in DATE,
+    v_endDate in DATE
+) AS 
 v_currentDay NUMBER;
 v_currentMont NUMBER;
 v_currentYear NUMBER;
@@ -48,6 +51,7 @@ BEGIN
         END IF;
     END LOOP;
 END PD_LOAD_D_TIME;
+/
 
 -- Procedure to load/update dimension table D_DESTINY
 CREATE OR REPLACE PROCEDURE UPDATE_D_DESTINY AS
@@ -72,6 +76,7 @@ BEGIN
         AND AIR.id_airport NOT IN (SELECT code_airport FROM D_DESTINY);
     COMMIT;
 END UPDATE_D_DESTINY;
+/
 
 -- Procedure to load/update destiny tickets
 -- PARAMS:
@@ -120,6 +125,7 @@ BEGIN
         COMMIT;
     END LOOP;
 END UPDATE_DESTINY_TICKETS;
+/
 
 
 ----------------------------------- EXECUTION --------------------------------------

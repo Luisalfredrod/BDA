@@ -14,7 +14,7 @@ if [ $3 -gt 4 ]; then
 fi
 
 # Set ORACLE_SID.
-ORACLE_SID = $4; EXPORT ORACLE_SID
+# ORACLE_SID=$4; EXPORT ORACLE_SID
 
 # Connect to sqlplus safely hidding credentials.
 # Drop tables.
