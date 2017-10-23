@@ -33,10 +33,12 @@ sh ./load_data.sh $1 $2
 
 # Connect to sqlplus safely hidding credentials.
 # Fragment tables.
+# Create distributed transactions.
 sqlplus /nolog << EOF
 connect $1/$2
 set sqlblanklines on
 @tables_fragment.sql $3
+@distributed_transactions.sql
 exit
 EOF
 
