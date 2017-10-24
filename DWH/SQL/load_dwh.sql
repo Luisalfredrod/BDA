@@ -38,7 +38,6 @@ BEGIN
         select to_char(v_startDate, 'YYYY') into v_anio from dual;
         select to_char(v_startDate, 'MONTH') into v_mes from dual;
         select to_char(v_startDate, 'DAY') into v_nombredia from dual;
-        select to_char(v_startDate, 'DAY') into v_nombredia from dual;
         SELECT EXTRACT(DAY FROM v_startDate) INTO v_dia FROM DUAL;
         INSERT INTO D_TIME VALUES(SEQ_D_TIME.NEXTVAL, v_startDate, v_anio, v_mes, v_dia, v_nombredia);
         COMMIT;        
