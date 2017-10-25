@@ -127,6 +127,24 @@ BEGIN
 END UPDATE_DESTINY_TICKETS;
 /
 
+-- Procedure to load D_AIRPLANE table
+CREATE OR REPLACE PROCEDURE UPDATE_D_AIRPLANE AS
+BEGIN
+    INSERT INTO D_AIRPLANE
+    SELECT SEQ_D_AIRPLANE.NEXTVAL,
+        MV_AIRPLANE.id_plane,
+        MV_AIRPLANE.name,
+        MV_AIRPLANE.capacity
+    FROM MV_AIRPLANE
+    WHERE MV_AIRPLANE.id_plane NOT IN (SELECT code_plane FROM D_AIRPLANE);
+    COMMIT;
+END UPDATE_D_AIRPLANE;
+/
+
+-- Procedure to load/update delays
+-- PARAMS:
+--  - STARTDATE: initial date of records to be updated
+--  - ENDDATE: final date of records to be updated
 CREATE OR REPLACE PROCEDURE UPDATE_DELAYS
 (
     STARTDATE IN DATE,
@@ -143,16 +161,19 @@ CURSOR c_delays IS
     SELECT MV_FLIGHT.id_flight as code_flight,
             D_DES.id_destiny as id_destiny,
             D_TIME.id_time as id_time,
+            D_AIRPLANE.code_plane as id_airplane,
             COUNT(4) as delay_count,
             SUM(MV_FLIGHT.delay_time) as total_delay_time
     FROM D_DESTINY D_DES,
             D_TIME,
-            MV_FLIGHT
+            MV_FLIGHT,
+            D_AIRPLANE
     WHERE MV_FLIGHT.on_time = 0
+        AND MV_FLIGHT.id_plane = D_AIRPLANE.code_plane
         AND MV_FLIGHT.flight_date BETWEEN vSTARTDATE AND vENDDATE
         AND TRUNC(D_TIME.date_complete) = TRUNC(MV_FLIGHT.flight_date)
         AND D_DES.code_airport = MV_FLIGHT.id_airport_arrival
-    GROUP BY MV_FLIGHT.id_flight, D_DES.id_destiny, D_TIME.id_time;
+    GROUP BY MV_FLIGHT.id_flight, D_DES.id_destiny, D_TIME.id_time, D_AIRPLANE.code_plane;
 
 BEGIN
     vSTARTDATE := STARTDATE;
@@ -166,7 +187,7 @@ BEGIN
 
     FOR i_delays in c_delays
     LOOP
-        INSERT INTO DELAYS VALUES(SEQ_DELAYS.NEXTVAL, i_delays.id_destiny, i_delays.id_time, i_delays.code_flight, i_delays.delay_count, i_delays.total_delay_time);
+        INSERT INTO DELAYS VALUES(SEQ_DELAYS.NEXTVAL, i_delays.id_destiny, i_delays.id_airplane, i_delays.id_time, i_delays.code_flight, i_delays.delay_count, i_delays.total_delay_time);
         COMMIT;
     END LOOP;
 END UPDATE_DELAYS;
@@ -179,6 +200,9 @@ EXECUTE PD_LOAD_D_TIME(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31'
 
 -- Execute procedure to load D_Destiny table
 EXECUTE UPDATE_D_DESTINY;
+
+-- Execute procedure to load D_AIRPLANE
+EXECUTE UPDATE_D_AIRPLANE;
 
 -- Execute procedure to load Destiny Tickets table.
 EXECUTE UPDATE_DESTINY_TICKETS(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31', 'yyyy/mm/dd'));

@@ -28,6 +28,7 @@ DROP SEQUENCE SEQ_D_AIRPLANE;
  * Destruction of materialized views.
  */
 DROP MATERIALIZED VIEW MV_AIRPORT;
+DROP MATERIALIZED VIEW MV_AIRPLANE;
 DROP MATERIALIZED VIEW MV_CITY;
 DROP MATERIALIZED VIEW MV_COUNTRY;
 DROP MATERIALIZED VIEW MV_CONTINENT;
@@ -42,13 +43,21 @@ DROP MATERIALIZED VIEW MV_FLIGHT;
  * NOTE: Materialized views only contain information needed to build cubes.
  */
 
--- Airplane materialized view
+-- Airport materialized view
 CREATE MATERIALIZED VIEW MV_AIRPORT
 BUILD IMMEDIATE
 REFRESH FORCE
 ON DEMAND
 AS
 SELECT * FROM AIRPORT@EUROPE;
+
+-- Airplane materialized view
+CREATE MATERIALIZED VIEW MV_AIRPLANE
+BUILD IMMEDIATE
+REFRESH FORCE
+ON DEMAND
+AS
+SELECT * FROM AIRPLANE@EUROPE;
 
 -- City materialized view
 CREATE MATERIALIZED VIEW MV_CITY
@@ -106,19 +115,19 @@ BUILD IMMEDIATE
 REFRESH FORCE
 ON DEMAND
 AS
-SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date, F.id_plane
 FROM FLIGHT@EUROPE F, ROUTE@EUROPE R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date, F.id_plane
 FROM FLIGHT@AMERICA F, ROUTE@AMERICA R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date, F.id_plane
 FROM FLIGHT@ASIA F, ROUTE@ASIA R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date, F.id_plane
 FROM FLIGHT@OCEANIA F, ROUTE@OCEANIA R
 WHERE F.id_route = R.id_route;
 
@@ -178,7 +187,6 @@ CREATE TABLE D_AIRPLANE
   capacity VARCHAR2(100) NOT NULL,
 
   CONSTRAINT pk_D_Airplane PRIMARY KEY (id_plane)
-
 );
 
 --Fact: AIRPLANE_FLIGHTS
@@ -198,6 +206,7 @@ CONSTRAINT fk_AirplaneFlightsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_tim
 CREATE TABLE DELAYS(
     id_delays NUMBER(10) NOT NULL,
     id_destiny NUMBER(10) NOT NULL,
+    id_plane NUMBER(10) NOT NULL,
     id_time NUMBER(10) NOT NULL,
     code_flight NUMBER(10) NOT NULL,
     delays_count NUMBER(10) NOT NULL,
