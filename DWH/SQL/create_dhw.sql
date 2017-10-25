@@ -10,9 +10,11 @@
 DROP TABLE DESTINY_TICKETS;
 DROP TABLE DELAYS;
 DROP TABLE AIRPLANE_FLIGHTS;
+DROP TABLE PASSENGER_FLIGHTS;
 DROP TABLE D_DESTINY;
 DROP TABLE D_TIME;
 DROP TABLE D_AIRPLANE;
+DROP TABLE D_PASSENGER;
 
 /*
  * Destruction of DHW sequences.
@@ -22,7 +24,9 @@ DROP SEQUENCE SEQ_D_TIME;
 DROP SEQUENCE SEQ_DESTINY_TICKETS;
 DROP SEQUENCE SEQ_DELAYS;
 DROP SEQUENCE SEQ_AIRPLANE_FLIGHTS;
+DROP SEQUENCE SEQ_PASSENGER_FLIGHTS;
 DROP SEQUENCE SEQ_D_AIRPLANE;
+DROP SEQUENCE SEQ_D_PASSENGER;
 
 /*
  * Destruction of materialized views.
@@ -122,6 +126,16 @@ SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.fli
 FROM FLIGHT@OCEANIA F, ROUTE@OCEANIA R
 WHERE F.id_route = R.id_route;
 
+-- Passenger materialized view
+CREATE MATERIALIZED VIEW MV_PASSENGER
+BUILD IMMEDIATE
+REFRESH FORCE
+ON DEMAND
+AS
+SELECT *
+FROM PASSENGER@EUROPE;
+
+
 /*
  * Creation of DHW tables.
  */
@@ -166,7 +180,7 @@ CREATE TABLE DESTINY_TICKETS
 
     CONSTRAINT pk_TicketSells PRIMARY KEY (id_destiny_tickets),
     CONSTRAINT fk_TicketSellsDestiny FOREIGN KEY (id_destiny) REFERENCES D_DESTINY(id_destiny),
-    CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)    
+    CONSTRAINT fk_TicketSellsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
 );
 
 -- Dimension: Airplane table.
@@ -180,6 +194,17 @@ CREATE TABLE D_AIRPLANE
   CONSTRAINT pk_D_Airplane PRIMARY KEY (id_plane)
 
 );
+-- Dimension: Passenger table.
+CREATE TABLE D_PASSENGER
+(
+  id_passenger NUMBER(10) NOT NULL,
+  code_passenger NUMBER(10) NOT NULL,
+  first_name VARCHAR2(50) NOT NULL,
+  last_name VARCHAR2(50) NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+
+  CONSTRAINT pk_D_Passenger PRIMARY KEY (id_passenger)
+);
 
 --Fact: AIRPLANE_FLIGHTS
 CREATE TABLE AIRPLANE_FLIGHTS
@@ -192,6 +217,20 @@ flights_made_count NUMBER(10) NOT NULL,
 CONSTRAINT pk_AirplaneFlights PRIMARY KEY (id_airplane_flights),
 CONSTRAINT fk_AirplaneFlightsAirplane FOREIGN KEY (id_plane) REFERENCES D_AIRPLANE(id_plane),
 CONSTRAINT fk_AirplaneFlightsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
+);
+
+--Fact: PASSENGER_FLIGHTS
+CREATE TABLE PASSENGER_FLIGHTS
+(
+  id_passenger_flights NUMBER(10) NOT NULL,
+  id_passenger NUMBER(10) NOT NULL,
+  id_time NUMBER(10) NOT NULL,
+  count_flights_passenger NUMBER(10) NOT NULL,
+
+  CONSTRAINT pk_PassengerFlights PRIMARY KEY (id_passenger_flights),
+  CONSTRAINT fk_PassengerFlightsPassenger FOREIGN KEY (id_passenger) REFERENCES D_PASSENGER(id_passenger),
+  CONSTRAINT fk_PassengerFlightsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
+
 );
 
 -- Fact: Delays table.
@@ -219,7 +258,11 @@ CREATE SEQUENCE SEQ_D_TIME;
 CREATE SEQUENCE SEQ_DESTINY_TICKETS;
 -- Airplane dimension sequence
 CREATE SEQUENCE SEQ_D_AIRPLANE;
+--Passenger dimension sequence
+CREATE SEQUENCE SEQ_D_PASSENGER;
 -- AirplaneFlights sequence
 CREATE SEQUENCE SEQ_AIRPLANE_FLIGHTS;
+--PassengerFlights sequence
+CREATE SEQUENCE SEQ_PASSENGER_FLIGHTS;
 -- Delays sequence
 CREATE SEQUENCE SEQ_DELAYS;
