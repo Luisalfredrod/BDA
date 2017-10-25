@@ -8,6 +8,7 @@
  * Destruction of DHW tables.
  */
 DROP TABLE DESTINY_TICKETS;
+DROP TABLE DELAYS;
 DROP TABLE AIRPLANE_FLIGHTS;
 DROP TABLE D_DESTINY;
 DROP TABLE D_TIME;
@@ -19,6 +20,7 @@ DROP TABLE D_AIRPLANE;
 DROP SEQUENCE SEQ_D_DESTINY;
 DROP SEQUENCE SEQ_D_TIME;
 DROP SEQUENCE SEQ_DESTINY_TICKETS;
+DROP SEQUENCE SEQ_DELAYS;
 DROP SEQUENCE SEQ_AIRPLANE_FLIGHTS;
 DROP SEQUENCE SEQ_D_AIRPLANE;
 
@@ -104,19 +106,19 @@ BUILD IMMEDIATE
 REFRESH FORCE
 ON DEMAND
 AS
-SELECT F.id_flight, F.price, R.id_airport_arrival
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
 FROM FLIGHT@EUROPE F, ROUTE@EUROPE R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
 FROM FLIGHT@AMERICA F, ROUTE@AMERICA R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
 FROM FLIGHT@ASIA F, ROUTE@ASIA R
 WHERE F.id_route = R.id_route
 UNION
-SELECT F.id_flight, F.price, R.id_airport_arrival
+SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.flight_date
 FROM FLIGHT@OCEANIA F, ROUTE@OCEANIA R
 WHERE F.id_route = R.id_route;
 
@@ -190,7 +192,20 @@ flights_made_count NUMBER(10) NOT NULL,
 CONSTRAINT pk_AirplaneFlights PRIMARY KEY (id_airplane_flights),
 CONSTRAINT fk_AirplaneFlightsAirplane FOREIGN KEY (id_plane) REFERENCES D_AIRPLANE(id_plane),
 CONSTRAINT fk_AirplaneFlightsTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
+);
 
+-- Fact: Delays table.
+CREATE TABLE DELAYS(
+    id_delays NUMBER(10) NOT NULL,
+    id_destiny NUMBER(10) NOT NULL,
+    id_time NUMBER(10) NOT NULL,
+    code_flight NUMBER(10) NOT NULL,
+    delays_count NUMBER(10) NOT NULL,
+    total_delays_time NUMBER(10) NOT NULL,
+
+    CONSTRAINT pk_Delays PRIMARY KEY (id_delays),
+    CONSTRAINT fk_DelaysDestiny FOREIGN KEY (id_destiny) REFERENCES D_DESTINY(id_destiny),
+    CONSTRAINT fk_DelaysTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
 );
 /*
  * Create Sequences for primary keys.
@@ -202,7 +217,9 @@ CREATE SEQUENCE SEQ_D_DESTINY;
 CREATE SEQUENCE SEQ_D_TIME;
 -- TicketSells sequence
 CREATE SEQUENCE SEQ_DESTINY_TICKETS;
---Airplane dimension sequence
+-- Airplane dimension sequence
 CREATE SEQUENCE SEQ_D_AIRPLANE;
---AirplaneFlights sequence
+-- AirplaneFlights sequence
 CREATE SEQUENCE SEQ_AIRPLANE_FLIGHTS;
+-- Delays sequence
+CREATE SEQUENCE SEQ_DELAYS;
