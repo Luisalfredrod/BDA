@@ -180,8 +180,8 @@ EXECUTE PD_LOAD_D_TIME(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31'
 -- Execute procedure to load D_Destiny table
 EXECUTE UPDATE_D_DESTINY;
 
--- Execute procedure to load D_Ticket table
+-- Execute procedure to load Destiny Tickets table.
 EXECUTE UPDATE_DESTINY_TICKETS(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31', 'yyyy/mm/dd'));
 
-
+-- Execute procedure to load Delays table.
 EXECUTE UPDATE_DELAYS(TO_DATE('2017/01/01', 'yyyy/mm/dd'), TO_DATE('2018/12/31', 'yyyy/mm/dd'));
