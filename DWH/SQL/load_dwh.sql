@@ -192,6 +192,47 @@ BEGIN
     END LOOP;
 END UPDATE_DELAYS;
 /
+-- Procedure UPDATE Airplane Flights
+CREATE OR REPLACE PROCEDURE UPDATE_AIRPLANE_FLIGHTS
+(
+  STARTDATE IN DATE,
+  ENDDATE IN DATE
+)AS
+vSTARTDATE DATE;
+VENDDATE DATE;
+
+CURSOR c_time IS
+SELECT id_airplane_flights FROM AIRPLANE_FLIGHTS
+WHERE id_time IN (SELECT id_time FROM D_TIME WHERE date_complete BETWEEN vSTARTDATE and vENDDATE);
+
+CURSOR c_airplane IS
+SELECT D_AIRPLANE.id_plane AS id_plane,
+    D_TIME.id_time AS id_time,
+    COUNT(MV_FLIGHT.id_flight) AS flights_made_count
+FROM D_AIRPLANE,
+    D_TIME,
+    MV_FLIGHT
+WHERE MV_FLIGHT.flight_date BETWEEN TO_DATE('2017/01/01', 'yyyy/mm/dd') AND TO_DATE('2018/01/01', 'yyyy/mm/dd')
+    AND TRUNC(D_TIME.date_complete) = TRUNC(MV_FLIGHT.flight_date)
+    AND MV_FLIGHT.id_plane = D_AIRPLANE.code_plane
+GROUP BY D_AIRPLANE.id_plane, D_TIME.id_time;
+
+BEGIN 
+  vSTARTDATE := STARTDATE;
+  vENDDATE := ENDDATE;
+
+    FOR i_time in c_time
+    LOOP
+        DELETE FROM AIRPLANE_FLIGHTS WHERE i_time.id_airplane_flights = id_airplane_flights;
+        COMMIT;
+    END LOOP;
+    FOR i_airplane in c_airplane
+    LOOP
+        INSERT INTO AIRPLANE_FLIGHTS VALUES(SEQ_AIRPLANE_FLIGHTS.NEXTVAL, i_airplane.id_plane, i_airplane.id_time, i_airplane.flights_made_count);
+        COMMIT;
+    END LOOP;
+END UPDATE_AIRPLANE_FLIGHTS;
+/
 
 ----------------------------------- EXECUTION --------------------------------------
 
@@ -209,3 +250,7 @@ EXECUTE UPDATE_DESTINY_TICKETS(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('201
 
 -- Execute procedure to load Delays table.
 EXECUTE UPDATE_DELAYS(TO_DATE('2017/01/01', 'yyyy/mm/dd'), TO_DATE('2018/12/31', 'yyyy/mm/dd'));
+
+
+-- Execute procedure to load Airplane Flights table.
+EXECUTE UPDATE_AIRPLANE_FLIGHTS(TO_DATE('2017/01/01', 'yyyy/mm/dd'), TO_DATE('2018/12/31', 'yyyy/mm/dd'));
