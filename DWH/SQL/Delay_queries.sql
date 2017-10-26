@@ -1,5 +1,5 @@
 
--- ¿Cuántos retrazos tuvo un avion en el año?
+-- ¿Cuántos retrazos tuvo un avion en el mes?
 SELECT D_A.name, SUM(delays_count) as TimesLate
 FROM D_AIRPLANE D_A, DELAYS, D_TIME
 WHERE D_A.id_plane = 1
