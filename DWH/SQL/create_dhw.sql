@@ -281,6 +281,7 @@ CREATE TABLE DELAYS(
 
     CONSTRAINT pk_Delays PRIMARY KEY (id_delays),
     CONSTRAINT fk_DelaysDestiny FOREIGN KEY (id_destiny) REFERENCES D_DESTINY(id_destiny),
+    CONSTRAINT fk_DelaysPlane FOREIGN KEY (id_plane) REFERENCES D_AIRPLANE(id_plane),
     CONSTRAINT fk_DelaysTime FOREIGN KEY (id_time) REFERENCES D_TIME(id_time)
 );
 /*
