@@ -33,6 +33,7 @@ DROP SEQUENCE SEQ_D_PASSENGER;
  */
 DROP MATERIALIZED VIEW MV_AIRPORT;
 DROP MATERIALIZED VIEW MV_AIRPLANE;
+DROP MATERIALIZED VIEW MV_PASSENGER;
 DROP MATERIALIZED VIEW MV_CITY;
 DROP MATERIALIZED VIEW MV_COUNTRY;
 DROP MATERIALIZED VIEW MV_CONTINENT;
@@ -62,6 +63,14 @@ REFRESH FORCE
 ON DEMAND
 AS
 SELECT * FROM AIRPLANE@EUROPE;
+
+-- Passenger materialized view
+CREATE MATERIALIZED VIEW MV_PASSENGER
+BUILD IMMEDIATE
+REFRESH FORCE
+ON DEMAND
+AS
+SELECT * FROM PASSENGER@EUROPE;
 
 -- City materialized view
 CREATE MATERIALIZED VIEW MV_CITY
@@ -135,14 +144,32 @@ SELECT F.id_flight, F.price, R.id_airport_arrival,F.on_time, F.delay_time, F.fli
 FROM FLIGHT@OCEANIA F, ROUTE@OCEANIA R
 WHERE F.id_route = R.id_route;
 
--- Passenger materialized view
-CREATE MATERIALIZED VIEW MV_PASSENGER
+-- Ticket 2 materialized view
+--Se que la vista no es necesaria y solo se necesita agregar el id_flight y flight_date a la otra vista de ticket,
+--pero el profe me recomendó ya no moverle a la vista y ya después lo mejoramos.
+CREATE MATERIALIZED VIEW MV_TICKET2
 BUILD IMMEDIATE
 REFRESH FORCE
 ON DEMAND
 AS
-SELECT *
-FROM PASSENGER@EUROPE;
+SELECT F.id_flight,FLIGHT_DATE, T.id_passenger
+FROM FLIGHT@EUROPE F, TICKET@EUROPE T
+WHERE F.id_flight = T.id_flight
+UNION
+SELECT F.id_flight,FLIGHT_DATE, T.id_passenger
+FROM FLIGHT@AMERICA F, TICKET@AMERICA T
+WHERE F.id_flight = T.id_flight
+UNION
+SELECT F.id_flight,FLIGHT_DATE, T.id_passenger
+FROM FLIGHT@ASIA F, TICKET@ASIA T
+WHERE F.id_flight = T.id_flight
+UNION
+SELECT F.id_flight,FLIGHT_DATE, T.id_passenger
+FROM FLIGHT@OCEANIA F, TICKET@OCEANIA T
+WHERE F.id_flight = T.id_flight;
+
+
+
 
 
 /*

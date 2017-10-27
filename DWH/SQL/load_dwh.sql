@@ -12,11 +12,11 @@
 -- PARAMS:
 --  - p_startDate : initial date to be filled in the Dimension time table
 --  - v_endData : final date to be filled in the Dimension time table
-CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME 
+CREATE OR REPLACE PROCEDURE PD_LOAD_D_TIME
 (
     p_startDate in DATE,
     v_endDate in DATE
-) AS 
+) AS
 v_currentDay NUMBER;
 v_currentMont NUMBER;
 v_currentYear NUMBER;
@@ -34,14 +34,14 @@ BEGIN
     SELECT EXTRACT(MONTH FROM v_endDate) INTO v_goalMonth FROM DUAL;
     SELECT EXTRACT(DAY FROM v_endDate) INTO v_goalDay FROM DUAL;
     WHILE v_do
-    LOOP        
+    LOOP
         select to_char(v_startDate, 'YYYY') into v_anio from dual;
         select to_char(v_startDate, 'MONTH') into v_mes from dual;
         select to_char(v_startDate, 'DAY') into v_nombredia from dual;
         select to_char(v_startDate, 'DAY') into v_nombredia from dual;
         SELECT EXTRACT(DAY FROM v_startDate) INTO v_dia FROM DUAL;
         INSERT INTO D_TIME VALUES(SEQ_D_TIME.NEXTVAL, v_startDate, v_anio, v_mes, v_dia, v_nombredia);
-        COMMIT;        
+        COMMIT;
         v_startDate := v_startDate + 1;
         SELECT EXTRACT(YEAR FROM v_startDate) INTO v_currentYear FROM DUAL;
         SELECT EXTRACT(MONTH FROM v_startDate) INTO v_currentMont FROM DUAL;
@@ -141,6 +141,21 @@ BEGIN
 END UPDATE_D_AIRPLANE;
 /
 
+--Procedure to load D_PASSENGER table
+CREATE OR REPLACE PROCEDURE UPDATE_D_PASSENGER AS
+BEGIN
+  INSERT INTO D_PASSENGER
+  SELECT SEQ_D_PASSENGER.NEXTVAL,
+      MV_PASSENGER.id_passenger,
+      MV_PASSENGER.first_name,
+      MV_PASSENGER.last_name,
+      MV_PASSENGER.email
+    FROM MV_PASSENGER
+    WHERE MV_PASSENGER.id_passenger NOT IN (SELECT code_passenger FROM D_PASSENGER);
+    COMMIT;
+  END UPDATE_D_PASSENGER;
+  /
+
 -- Procedure to load/update delays
 -- PARAMS:
 --  - STARTDATE: initial date of records to be updated
@@ -192,7 +207,48 @@ BEGIN
     END LOOP;
 END UPDATE_DELAYS;
 /
+-- Procedure UPDATE Passenger Flights
+CREATE OR REPLACE PROCEDURE UPDATE_PASSENGER_FLIGHTS
+(
+  STARTDATE IN DATE,
+  ENDDATE IN DATE
+)AS
+vSTARTDATE DATE;
+VENDDATE DATE;
 
+CURSOR c_time IS
+SELECT id_passenger_flights FROM PASSENGER_FLIGHTS
+WHERE id_time IN (SELECT id_time FROM D_TIME WHERE date_complete BETWEEN vSTARTDATE and vENDDATE);
+
+
+CURSOR c_passenger IS
+SELECT D_PASSENGER.id_passenger AS id_passenger,D_TIME.id_time AS id_time,
+    COUNT(MV_TICKET2.id_passenger) AS count_flights_passenger
+FROM D_PASSENGER,
+    D_TIME,
+    MV_TICKET2
+    WHERE MV_TICKET2.flight_date BETWEEN TO_DATE('2017/01/01', 'yyyy/mm/dd') AND TO_DATE('2018/01/01', 'yyyy/mm/dd')
+        AND TRUNC(D_TIME.date_complete) = TRUNC(MV_TICKET2.flight_date)
+        AND MV_TICKET2.id_passenger = D_passenger.code_passenger
+
+    GROUP BY D_PASSENGER.id_passenger, D_TIME.id_time;
+
+BEGIN
+  vSTARTDATE := STARTDATE;
+  vENDDATE := ENDDATE;
+
+    FOR i_time in c_time
+    LOOP
+        DELETE FROM PASSENGER_FLIGHTS WHERE i_time.id_passenger_flights = id_passenger_flights;
+        COMMIT;
+    END LOOP;
+    FOR i_passenger in c_passenger
+    LOOP
+        INSERT INTO PASSENGER_FLIGHTS VALUES(SEQ_PASSENGER_FLIGHTS.NEXTVAL, i_passenger.id_passenger, i_passenger.id_time, i_passenger.count_flights_passenger);
+        COMMIT;
+    END LOOP;
+END UPDATE_PASSENGER_FLIGHTS;
+/
 ----------------------------------- EXECUTION --------------------------------------
 
 -- Execute procedure to load D_Time table
@@ -203,6 +259,12 @@ EXECUTE UPDATE_D_DESTINY;
 
 -- Execute procedure to load D_AIRPLANE
 EXECUTE UPDATE_D_AIRPLANE;
+
+--Execute procedure to Loada D_PASSENGER
+EXECUTE UPDATE_D_PASSENGER;
+
+--Execute procedure to Load PASSENGER_FLIGHTS
+EXECUTE UPDATE_PASSENGER_FLIGHTS(TO_DATE('2017/01/01', 'yyyy/mm/dd'), TO_DATE('2018/12/31', 'yyyy/mm/dd'));
 
 -- Execute procedure to load Destiny Tickets table.
 EXECUTE UPDATE_DESTINY_TICKETS(TO_DATE('2016/01/01', 'yyyy/mm/dd'), TO_DATE('2017/12/31', 'yyyy/mm/dd'));
